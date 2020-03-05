@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.VideoMapper">
+    <resultMap id="VideoMap" type="com.example.demo.entity.Video">
+        <id column="vidID" property="vidID" jdbcType="INTEGER"/>
+        <result column="vidName" property="vidName" jdbcType="VARCHAR"/>
+        <result column="vidUrl" property="vidUrl" jdbcType="VARCHAR"/>
+        <result column="vidType" property="vidType" jdbcType="INTEGER"/>
+        <result column="vidStartTime" property="vidStartTime" jdbcType="TIMESTAMP"/>
+        <result column="staffID" property="staffID" jdbcType="INTEGER"/>
+        <result column="opLocX" property="opLocX" jdbcType="DOUBLE"/>
+        <result column="opLocY" property="opLocY" jdbcType="DOUBLE"/>
+        <result column="vidSkchImgUrl" property="vidSkchImgUrl" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <insert id="insertVideo" parameterType="video">
+        insert into video(vidName,vidUrl,vidType,vidStartTime,staffID,opLocX,opLocY,vidSkchImgUrl)
+        values (#{vidName,jdbcType=VARCHAR},#{vidUrl,jdbcType=VARCHAR},#{vidType,jdbcType=INTEGER},#{vidStartTime,jdbcType=TIMESTAMP},#{staffID,jdbcType=INTEGER},#{opLocX,jdbcType=DOUBLE},#{opLocY,jdbcType=DOUBLE},#{vidSkchImgUrl,jdbcType=VARCHAR})
+    </insert>
+
+    <select id="searchByName" parameterType="string" resultMap="VideoMap">
+        select * from video
+        where vidName=#{vidName,jdbcType=VARCHAR}
+    </select>
+    
+    <select id="searchVideoAll" resultMap="VideoMap">
+        select * from video
+    </select>
+
+    <select id="searchVideoByID" resultMap="VideoMap" parameterType="java.lang.Integer">
+        select * from video
+        where vidID=#{vidID,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteVideoByID" parameterType="java.lang.Integer">
+        delete from video
+        where vidID=#{vidID,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteVideoByUserID" parameterType="java.lang.Integer">
+        delete from video
+        where staffID=#{userID,jdbcType=INTEGER}
+    </delete>
+
+    <select id="searchVideoByUserID" parameterType="java.lang.Integer" resultMap="VideoMap">
+        select * from video
+        where staffID=#{userID,jdbcType=INTEGER}
+    </select>
+</mapper>

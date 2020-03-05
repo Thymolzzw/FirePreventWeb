@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.PictureMapper">
+    <resultMap id="PictureMap" type="com.example.demo.entity.Picture">
+        <id column="imgID" property="imgID" jdbcType="INTEGER"/>
+        <result column="imgName" property="imgName" jdbcType="VARCHAR"/>
+        <result column="imgRes" property="imgRes" jdbcType="VARCHAR"/>
+        <result column="imgUrl" property="imgUrl" jdbcType="VARCHAR"/>
+        <result column="imgType" property="imgType" jdbcType="INTEGER"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="staffID" property="staffID" jdbcType="INTEGER"/>
+        <result column="opLocX" property="opLocX" jdbcType="DOUBLE"/>
+        <result column="opLocY" property="opLocY" jdbcType="DOUBLE"/>
+    </resultMap>
+
+    <select id="searchPictureByName" resultMap="PictureMap" parameterType="string">
+        select * from picture
+        where imgName=#{imgName,jdbcType=VARCHAR}
+    </select>
+
+    <insert id="insertPicture" parameterType="picture">
+        insert into picture(imgName,imgRes,imgUrl,imgType,createTime,staffID,opLocX,opLocY)
+        values (#{imgName,jdbcType=VARCHAR},#{imgRes,jdbcType=VARCHAR},#{imgUrl,jdbcType=VARCHAR},#{imgType,jdbcType=INTEGER},#{createTime,jdbcType=TIMESTAMP},#{staffID,jdbcType=INTEGER},#{opLocX,jdbcType=DOUBLE},#{opLocY,jdbcType=DOUBLE})
+    </insert>
+
+    <select id="searchPictureAll" resultMap="PictureMap">
+        select * from picture
+    </select>
+
+    <select id="searchPictureByID" resultMap="PictureMap">
+        select * from Picture
+        where imgID=#{imgID,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deletePictureByImgID" parameterType="java.lang.Integer">
+        delete from picture
+        where imgID=#{imgID,jdbcType=INTEGER}
+    </delete>
+
+    <delete id="deletePictureByUserID" parameterType="java.lang.Integer">
+        delete from picture
+        where staffID=#{userID,jdbcType=INTEGER}
+    </delete>
+
+    <select id="searchPictureByUserID" parameterType="java.lang.Integer" resultMap="PictureMap">
+        select * from Picture
+        where staffID=#{userID,jdbcType=INTEGER}
+    </select>
+
+</mapper>

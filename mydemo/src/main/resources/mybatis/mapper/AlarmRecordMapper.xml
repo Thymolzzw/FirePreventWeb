@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.AlarmRecordMapper">
+    <resultMap id="AlarmMap" type="com.example.demo.entity.AlarmRecord">
+        <id column="almRecID" property="almRecID" jdbcType="INTEGER"/>
+        <result column="almTime" property="almTime" jdbcType="TIMESTAMP"/>
+        <result column="staffID" property="staffID" jdbcType="INTEGER"/>
+        <result column="opLocX" property="opLocX" jdbcType="DOUBLE"/>
+        <result column="opLocY" property="opLocY" jdbcType="DOUBLE"/>
+        <result column="isHandled" property="isHandled" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <insert id="insertAlarmRecord" parameterType="alarmRecord">
+        insert into alarmrecord(almTime,staffID,opLocX,opLocY,isHandled)
+        values (#{almTime,jdbcType=TIMESTAMP},#{staffID,jdbcType=INTEGER},#{opLocX,jdbcType=DOUBLE},#{opLocY,jdbcType=DOUBLE},#{isHandled,jdbcType=INTEGER})
+    </insert>
+
+    <select id="searchAlarmRecordAll" resultMap="AlarmMap">
+        select * from alarmrecord
+    </select>
+
+    <select id="searchAlarmRecordByID" resultMap="AlarmMap" parameterType="java.lang.Integer">
+        select * from alarmrecord
+        where almRecID=#{almRecID,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteAlarmRecordByID" parameterType="java.lang.Integer">
+        delete from alarmrecord
+        where almRecID=#{almRecID,jdbcType=INTEGER}
+    </delete>
+
+    <update id="updateAlarmRecord" parameterType="alarmRecord">
+        update alarmrecord
+        set almTime=#{almTime,jdbcType=TIMESTAMP},
+            staffID=#{staffID,jdbcType=INTEGER},
+            opLocX=#{opLocX,jdbcType=DOUBLE},
+            opLocY=#{opLocY,jdbcType=DOUBLE},
+            isHandled=#{isHandled,jdbcType=INTEGER}
+        where almRecID=#{almRecID,jdbcType=INTEGER}
+    </update>
+
+    <delete id="deleteAlarmRecordByUserID" parameterType="java.lang.Integer">
+        delete from alarmrecord
+        where staffID=#{userID,jdbcType=INTEGER}
+    </delete>
+
+
+
+</mapper>

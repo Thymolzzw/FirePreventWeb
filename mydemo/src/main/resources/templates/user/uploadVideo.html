@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>森林防火</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+    <script src="../layui/layui.js"></script>
+    <style>
+        /*对layui中的样式进行重写*/
+        .layui-tab-content {
+            padding: 0;/*layui-tab-content:默认有padding: 10px;的值，因为iframe的绝对定位脱离文档流，所以会存在20px的空白空间*/
+        }
+        .show-frame {
+            top: 50px!important;
+            /*默认.layui-layout-admin .layui-body {
+                top: 60px;
+                bottom: 44px;
+            }*/
+            overflow: hidden;/*消除浏览器最右边的滚动条*/
+        }
+        .frame {
+            position: absolute;
+            padding: 10px;/*与layui-footer隔开一段距离*/
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <style>
+        .ui_upload{
+            height: 35px;
+            width: 80px;
+            background-color: #2be8ee;
+            font-size: 14px;
+            line-height: 35px;
+            cursor: pointer;
+            display: inline-block;
+            text-align: center;
+            color: #fff;
+            border-radius: 3px;
+            margin-left: 0;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-layout layui-layout-admin">
+
+    <div th:replace="/common/header :: headerBar"></div>
+    <div th:replace="/user/lefter :: lefterBar"></div>
+
+    <div class="layui-body show-frame">
+        <div class="layui-tab layui-tab-brief" lay-allowClose="true" lay-filter="empTab">
+            <ul class="layui-tab-title">
+                <li class="layui-this "><i class="layui-icon">上传视频</i></li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <br>
+                    <form class="layui-form" action="/doUploadVideo" method="post" enctype="multipart/form-data">
+
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label"></label>
+                            <div class="layui-upload">
+                                <label for="upload" class="ui_upload">选择视频</label>
+                                <input type="file" name="myfile" id="upload" style="display: none;"/>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">视频类型</label>
+                            <div class="layui-input-inline">
+                                <select name="vidType" lay-verify="required">
+                                    <option value=""></option>
+                                    <option value="1">监控视频</option>
+                                    <option value="2">手动录制视频</option>
+                                    <option value="3">报警视频</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label">坐标X</label>
+                            <div class="layui-input-inline">
+                                <label>
+                                    <input type="text" name="opLocX" required  lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label">坐标Y</label>
+                            <div class="layui-input-inline">
+                                <label>
+                                    <input type="text" name="opLocY" required  lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button id="up" class="layui-btn" lay-submit>上传</button>
+                                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="/common/footer :: footerBar"></div>
+</div>
+<script src="../layui/layui.js"></script>
+<script>
+    //JavaScript代码区域
+    layui.use('element', function(){
+        var element = layui.element;
+        var $ = layui.$;
+        $("[name=t1]").click(function () {
+            var id = $(this).attr("id");
+            var content = $(this).attr("content");
+            if($("li[lay-id="+id+"]").length===0){
+                element.tabAdd("empTab",{
+                    title:$(this).attr("title"),
+                    content:"<iframe src='"+content+"' class='frame' frameborder='0'></iframe>",
+                    id:id
+                })
+            }
+            element.tabChange('empTab',id)
+        })
+
+    });
+</script>
+<script>
+    //Demo
+    layui.use('form', function(){
+        var form = layui.form;
+
+        //监听提交
+        form.on('submit(formDemo)', function(data){
+            layer.msg(JSON.stringify(data.field));
+            return false;
+        });
+    });
+
+</script>
+</body>
+</body>
+</html>

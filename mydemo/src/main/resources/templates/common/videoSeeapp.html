@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:c="http://www.w3.org/1999/XSL/Transform">
+<head>
+    <meta charset="UTF-8">
+    <meta name="referrer" content="never">
+    <title>森林防火</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+    <script src="../layui/layui.js"></script>
+
+</head>
+<body>
+
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <form class="layui-form" action="">
+                        <br>
+                        [[${videoSeeUrl}]]
+                        <div class="layui-form-item" >
+                            <div>
+                                <video th:src="${videoSeeUrl}" style="width: auto;height: 600px" controls="controls" autoplay="autoplay"></video>
+                            </div>
+
+                        </div>
+                        <div class="layui-form-item">
+                        <label class="layui-form-label">视频ID:</label>
+                        <div class="layui-input-inline">
+                            <label>
+                                <input name="vidID" style="border: none; outline: none" type="text" autocomplete="off" class="layui-input" readonly th:value="${theVideoToSee.vidID}">
+                            </label>
+                        </div>
+                    </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">视频名:</label>
+                            <div class="layui-input-block">
+                                <label>
+                                    <input name="vidName" style="border: none; outline: none" type="text" autocomplete="off" class="layui-input" readonly th:value="${theVideoToSee.vidName}">
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                        <label class="layui-form-label">视频类型:</label>
+                        <div class="layui-input-inline">
+                            <label>
+                                <input name="vidType" style="border: none; outline: none" type="text" autocomplete="off" class="layui-input" readonly th:value="${theVideoToSee.vidType==1?'监控视频':(theVideoToSee.vidType==2?'手动录制视频':'报警视频')}">
+                            </label>
+                        </div>
+                    </div>
+
+
+                    </form>
+                </div>
+            </div>
+
+<script src="../layui/layui.js"></script>
+
+
+<script>
+    //JavaScript代码区域
+    layui.use('element', function(){
+        var element = layui.element;
+        var $ = layui.$;
+        $("[name=t1]").click(function () {
+            var id = $(this).attr("id");
+            var content = $(this).attr("content");
+            if($("li[lay-id="+id+"]").length===0){
+                element.tabAdd("empTab",{
+                    title:$(this).attr("title"),
+                    content:"<iframe src='"+content+"' class='frame' frameborder='0'></iframe>",
+                    id:id
+                })
+            }
+            element.tabChange('empTab',id)
+        })
+
+    });
+</script>
+
+</body>
+</html>

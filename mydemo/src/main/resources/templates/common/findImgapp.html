@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../layui/css/layui.css">
+    <script src="../layui/layui.js"></script>
+<!--    <style>-->
+<!--        /*对layui中的样式进行重写*/-->
+<!--        .layui-tab-content {-->
+<!--            padding: 0;/*layui-tab-content:默认有padding: 10px;的值，因为iframe的绝对定位脱离文档流，所以会存在20px的空白空间*/-->
+<!--        }-->
+<!--        .show-frame {-->
+<!--            top: 50px!important;-->
+<!--            /*默认.layui-layout-admin .layui-body {-->
+<!--                top: 60px;-->
+<!--                bottom: 44px;-->
+<!--            }*/-->
+<!--            overflow: hidden;/*消除浏览器最右边的滚动条*/-->
+<!--        }-->
+<!--        .frame {-->
+<!--            position: absolute;-->
+<!--            padding: 10px;/*与layui-footer隔开一段距离*/-->
+<!--            width: 100%;-->
+<!--            height: 100%;-->
+<!--        }-->
+<!--    </style>-->
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>森里防火</title>
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/font-awesome.min.css" rel="stylesheet">
+        <link href="css/pe-icons.css" rel="stylesheet">
+        <link href="css/prettyPhoto.css" rel="stylesheet">
+        <link href="css/animate.css" rel="stylesheet">
+        <link href="css/style.css" rel="stylesheet">
+        <script src="js/jquery.js"></script>
+        <!--[if lt IE 9]>
+        <script src="js/html5shiv.js"></script>
+        <script src="js/respond.min.js"></script>
+        <![endif]-->
+        <link rel="shortcut icon" href="images/ico/favicon.ico">
+        <link rel="apple-touch-icon" sizes="144x144" href="images/ico/apple-touch-icon-144x144.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="images/ico/apple-touch-icon-114x114.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="images/ico/apple-touch-icon-72x72.png">
+        <link rel="apple-touch-icon" href="images/ico/apple-touch-icon-57x57.png">
+
+
+    </head><!--/head-->
+
+<body>
+
+
+<div id="content-wrapper">
+    <section id="blog" class="white">
+        <div class="container">
+            <div class="gap"></div>
+            <div class="row">
+                <aside class="col-sm-4 col-sm-push-8">
+                    <div class="widget search">
+
+                    </div>
+                    <div class="widget categories">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                <form class="layui-form" action="/reloadImgapp" method="post">
+                                    <div class="input-group">
+                                        <h5>图片名</h5>
+                                            <input type="text" name="imgName" placeholder="请输入名称" autocomplete="off" class="layui-input">
+
+
+                                        <h5>图片类型</h5>
+
+                                            <select name="imgType">
+                                                <option value=""></option>
+                                                <option value="1">手动截取</option>
+                                                <option value="2">系统自动截取</option>
+                                            </select>
+
+
+                                        <div class="col-sm-6">
+
+                                        <button id="up1" class="layui-btn" lay-submit>查询</button>
+                                        </div>
+
+                                    </div>
+                                </form>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </aside>
+                <div class="col-sm-8 col-sm-pull-4">
+                    <div class="blog">
+
+
+                            <table id="demo" lay-filter="test" class="layui-table">
+                                <thead>
+                                <tr>
+
+                                    <th lay-data="{field:'resourceName', width:180，}">图片名</th>
+                                    <th lay-data="{field:'resourceType', width:180}">图片类型</th>
+                                    <th lay-data="{field:'uploadTime', width:180}">上传时间</th>
+
+                                    <th lay-data="{field:'uploadTime', width:180}">操作</th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                <label class="layui-form-label"></label>
+                                <tr th:each="img:${imgList}">
+
+                                    <td>[[${img.imgName}]]</td>
+
+                                    <td>[[${img.imgType==1?'手动截取':'系统自动截取'}]]</td>
+                                    <td>[[${img.createTime}]]</td>
+
+                                    <td><a class="btn btn-sm btn-danger" th:href="@{/imgSeeapp/}+${img.imgID}"><h5 style="color: #5FB878">查看</h5></a></td>
+                                </tr>
+                                </tbody>
+
+
+                            </table>
+
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+                </form>
+
+
+
+                    </div>
+                </div><!--/.col-md-8-->
+            </div><!--/.row-->
+        </div>
+    </section><!--/#blog-->
+</div>
+
+
+
+
+
+
+<script src="../layui/layui.js"></script>
+<script>
+    //JavaScript代码区域
+    layui.use('element', function(){
+        var element = layui.element;
+        var $ = layui.$;
+        $("[name=t1]").click(function () {
+            var id = $(this).attr("id");
+            var content = $(this).attr("content");
+            if($("li[lay-id="+id+"]").length===0){
+                element.tabAdd("empTab",{
+                    title:$(this).attr("title"),
+                    content:"<iframe src='"+content+"' class='frame' frameborder='0'></iframe>",
+                    id:id
+                })
+            }
+            element.tabChange('empTab',id)
+        })
+
+    });
+</script>
+
+<script>
+    //Demo
+    layui.use('form', function(){
+        var form = layui.form;
+
+        //监听提交
+        form.on('submit(formDemo)', function(data){
+            layer.msg(JSON.stringify(data.field));
+            return false;
+        });
+    });
+
+</script>
+</body>
+</body>
+</html>

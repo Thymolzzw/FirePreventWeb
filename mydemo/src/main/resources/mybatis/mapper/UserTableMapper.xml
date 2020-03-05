@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.UserTableMapper">
+    <resultMap id="UserMap" type="com.example.demo.entity.UserTable">
+        <id column="userID" property="userID" jdbcType="INTEGER"/>
+        <result column="userPwd" property="userPwd" jdbcType="VARCHAR"/>
+        <result column="userName" property="userName" jdbcType="VARCHAR"/>
+        <result column="userRight" property="userRight" jdbcType="INTEGER"/>
+        <result column="userDept" property="userDept" jdbcType="VARCHAR"/>
+        <result column="userMail" property="userMail" jdbcType="VARCHAR"/>
+        <result column="userPhone" property="userPhone" jdbcType="VARCHAR"/>
+        <result column="empTime" property="empTime" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="searchUserByUserNameAndPasswordAndUserRight" resultMap="UserMap">
+        select * from usertable
+        where userName=#{userName,jdbcType=VARCHAR} and userPwd=#{userPwd,jdbcType=VARCHAR} and userRight=#{userRight,jdbcType=INTEGER}
+    </select>
+
+    <select id="searchUserByID" parameterType="java.lang.Integer" resultMap="UserMap">
+        select * from usertable
+        where userID=#{userID,jdbcType=INTEGER}
+    </select>
+
+    <update id="updateUser" parameterType="userTable">
+        update usertable
+        set userPwd=#{userPwd,jdbcType=VARCHAR},
+            userName=#{userName,jdbcType=VARCHAR},
+            userRight=#{userRight,jdbcType=INTEGER},
+            userDept=#{userDept,jdbcType=VARCHAR},
+            userMail=#{userMail,jdbcType=VARCHAR},
+            userPhone=#{userPhone,jdbcType=VARCHAR},
+            empTime=#{empTime,jdbcType=VARCHAR}
+        where userID=#{userID,jdbcType=INTEGER}
+    </update>
+
+    <select id="searchUserAll" resultMap="UserMap">
+        select * from usertable
+    </select>
+    <delete id="deleteUserByUserID" parameterType="java.lang.Integer">
+        delete from usertable
+        where userID=#{userID,jdbcType=INTEGER}
+    </delete>
+
+    <select id="searchUserByName" resultMap="UserMap" parameterType="string">
+        select * from usertable
+        where userName=#{userName,jdbcType=VARCHAR}
+    </select>
+
+    <insert id="insertUser" parameterType="userTable">
+        insert into usertable(userPwd,userName,userRight,userDept,userMail,userPhone,empTime)
+        values (#{userPwd,jdbcType=VARCHAR},#{userName,jdbcType=VARCHAR},#{userRight,jdbcType=INTEGER},#{userDept,jdbcType=VARCHAR},#{userMail,jdbcType=VARCHAR},#{userPhone,jdbcType=VARCHAR},#{empTime,jdbcType=VARCHAR})
+    </insert>
+
+</mapper>

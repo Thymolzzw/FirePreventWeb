@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>森林防火</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+    <script src="../layui/layui.js"></script>
+    <style>
+        /*对layui中的样式进行重写*/
+        .layui-tab-content {
+            padding: 0;/*layui-tab-content:默认有padding: 10px;的值，因为iframe的绝对定位脱离文档流，所以会存在20px的空白空间*/
+        }
+        .show-frame {
+            top: 50px!important;
+            /*默认.layui-layout-admin .layui-body {
+                top: 60px;
+                bottom: 44px;
+            }*/
+            overflow: hidden;/*消除浏览器最右边的滚动条*/
+        }
+        .frame {
+            position: absolute;
+            padding: 10px;/*与layui-footer隔开一段距离*/
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+</head>
+<body>
+<div class="layui-layout layui-layout-admin">
+
+    <div th:replace="/common/header :: headerBar"></div>
+    <div th:replace="/user/lefter :: lefterBar"></div>
+
+    <div class="layui-body show-frame">
+        <div class="layui-tab layui-tab-brief" lay-allowClose="true" lay-filter="empTab">
+            <ul class="layui-tab-title">
+                <li class="layui-this "><i class="layui-icon">报警记录查找</i></li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <br>
+                    <form class="layui-form" action="/deleteAlarm" method="post">
+
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">记录列表</label>
+                            <div class="layui-input-block">
+
+                                <div style="height: 500px;width:auto;overflow: auto;">
+                                    <table id="demo" lay-filter="test" class="layui-table">
+                                        <thead>
+                                        <tr>
+                                            <th lay-data="{checkbox:true}">删除</th>
+                                            <th lay-data="{field:'resourceID', width:80}">记录ID</th>
+                                            <th lay-data="{field:'uploadTime', width:180}">报警时间</th>
+                                            <th lay-data="{field:'uploadTime', width:180}">上传者ID</th>
+                                            <th lay-data="{field:'uploadTime', width:180}">坐标X</th>
+                                            <th lay-data="{field:'uploadTime', width:180}">坐标Y</th>
+                                            <th lay-data="{field:'uploadTime', width:180}">是否处理</th>
+                                            <th lay-data="{field:'uploadTime', width:180}">操作</th>
+                                        </tr>
+                                        </thead>
+
+                                        <tbody>
+                                        <label class="layui-form-label"></label>
+                                        <tr th:each="alarm:${alarmRecordList}">
+                                            <td><label for="subcheck"></label><input type="checkbox" id="subcheck"
+                                                                                     name="toDeleteAlarm" th:value="${alarm.almRecID}"} /></td>
+                                            <td>[[${alarm.almRecID}]]</td>
+                                            <td>[[${alarm.almTime}]]</td>
+                                            <td>[[${alarm.staffID}]]</td>
+                                            <td>[[${alarm.opLocX}]]</td>
+                                            <td>[[${alarm.opLocY}]]</td>
+                                            <td>[[${alarm.isHandled==0?'未处理':'已处理'}]]</td>
+                                            <td><a class="btn btn-sm btn-danger" th:href="@{/alarmHandle/}+${alarm.almRecID}" th:if="${session.user.userRight==3}"><h5 style="color: #5FB878">处理</h5></a></td>
+                                        </tr>
+                                        </tbody>
+
+
+                                    </table>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button id="up" class="layui-btn" lay-submit>删除</button>
+                                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                            </div>
+                        </div>
+                    </form>
+                    <form class="layui-form" action="/reloadAlarm" method="post">
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">是否处理</label>
+                            <div class="layui-input-inline">
+                                <select name="isHandled">
+                                    <option value=""></option>
+                                    <option value="0">未处理</option>
+                                    <option value="1">已处理</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button id="up1" class="layui-btn" lay-submit>查询</button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="/common/footer :: footerBar"></div>
+</div>
+<script src="../layui/layui.js"></script>
+<script>
+    //JavaScript代码区域
+    layui.use('element', function(){
+        var element = layui.element;
+        var $ = layui.$;
+        $("[name=t1]").click(function () {
+            var id = $(this).attr("id");
+            var content = $(this).attr("content");
+            if($("li[lay-id="+id+"]").length===0){
+                element.tabAdd("empTab",{
+                    title:$(this).attr("title"),
+                    content:"<iframe src='"+content+"' class='frame' frameborder='0'></iframe>",
+                    id:id
+                })
+            }
+            element.tabChange('empTab',id)
+        })
+
+    });
+</script>
+
+<script>
+    //Demo
+    layui.use('form', function(){
+        var form = layui.form;
+
+        //监听提交
+        form.on('submit(formDemo)', function(data){
+            layer.msg(JSON.stringify(data.field));
+            return false;
+        });
+    });
+
+</script>
+</body>
+</body>
+</html>
